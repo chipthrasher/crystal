@@ -11,6 +11,11 @@ html {
     --dark-purple: #282630;
     --medium-purple: #5C5889;
     --light-purple: #938ED4;
+    
+    --dark-red: #8C4242;
+    --light-red: #D56161;
+
+    /* --top-background: url('assets/cave.jpg'); */
 }
 
 body {
@@ -19,7 +24,7 @@ body {
 
     width: 100vw;
     height: 100vh;
-    background-image: linear-gradient(to top, var(--dark-purple), var(--dark-purple), transparent), url('assets/cave.jpg');
+    background-image: linear-gradient(to top, var(--dark-purple), var(--dark-purple), transparent), var(--top-background);
     background-size: cover;
 
     color: white;
@@ -67,6 +72,17 @@ body {
     text-shadow: 0.1em 0.1em 0px var(--dark-purple);
 }
 
+.header-ingame .title {
+    font-size: 1.5em;
+    color: var(--light-purple);
+    text-shadow: 0.075em 0.1em 0px var(--dark-purple);
+}
+
+.header-ingame .subtitle {
+    font-size: 4em;
+    text-shadow: 0.075em 0.075em 0px var(--dark-purple);
+}
+
 #content {
     font-size: 1.6em;
     padding: 1em 0;
@@ -75,12 +91,20 @@ body {
     flex: 1;
 }
 
-#content .textbox {
+.textbox {
     background-color: var(--dark-purple);
     padding: 1em;
     border: 0.25em solid var(--medium-purple);
     border-radius: 0.5em;
     margin: 1em 0;
+}
+
+.textbox-red {
+    border-color: var(--dark-red);
+}
+
+.text-red {
+    color: var(--light-red);
 }
 
 .crystals {
