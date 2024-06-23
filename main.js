@@ -2,10 +2,20 @@
 document.addEventListener('DOMContentLoaded', function () {
   // document.getElementById('header').classList.add('header-main-menu');
   // document.getElementById('header').classList.add('header-ingame');
-  // showMenu();
-  showLevel(0);
+
+  showMenu();
+
+  let gameState = {
+    "level": 0,
+    "inventory": [],
+    "money": 0
+  };
+
+  // showLevel(gameState.level);
 });
 
+// Show the menu!
+// Change the header, show a random subtitle message, and equip the PLAY button.
 function showMenu() {
   // Change header
 
@@ -17,12 +27,17 @@ function showMenu() {
   ];
   const message = messages[Math.floor(Math.random() * messages.length)];
   document.getElementById('header-wrapper').innerHTML = `<div class="title">Crystal Collector 3</div><div class="subtitle">${message}</div>`;
+  document.documentElement.style.setProperty('--top-background', `url(assets/cave.jpg)`);
 
   // Change content
+  const content = document.getElementById('content');
+  content.innerHTML = '<div id="button-wrapper"><button id="play">PLAY</button></div>';
 
-  
+  document.getElementById('play').addEventListener('click', startGame);
 }
 
+// Show the level with the given ID!
+// Validate the ID, change the header, and delegate to showing cutscene, gameplay, or merchant.
 function showLevel(id) {
   // ID needs to be a number in the range of the progression array
   if (id < 0 || id >= progression.length) {
@@ -38,6 +53,27 @@ function showLevel(id) {
   document.getElementById('header-wrapper').innerHTML = `<div class="title">Crystal Collector 3</div><div class="subtitle">${level.name}</div>`;
   document.documentElement.style.setProperty('--top-background', `url(${level.image})`);
 
+  // Check the type of level
+  if (level.type === "cutscene") {
+    showCutscene(id);
+  } else if (level.type === "gameplay") {
+    showGameplay(id);
+  } else if (level.type === "merchant") {
+    showMerchant(id);
+  }
+}
+
+// Load the gameplay screen for the given ID.
+function showGameplay(id) {
+  // ID needs to be a number in the range of the progression array
+  if (id < 0 || id >= progression.length) {
+    console.error("Invalid level ID.");
+    return;
+  }
+
+  // Get the level object
+  const level = progression[id];
+
   // Change content
   const content = document.getElementById('content');
   content.innerHTML = '';
@@ -49,8 +85,8 @@ function showLevel(id) {
   content.innerHTML += `<div class="crystals"><img class="crystal" src="assets/crystal-blue.png" data-color="blue"><img class="crystal" src="assets/crystal-white.png" data-color="white"><img class="crystal" src="assets/crystal-red.png" data-color="red"><img class="crystal" src="assets/crystal-green.png" data-color="green"></div>`;
 }
 
-// Once the level's loading screen is shown, and the START button is clicked, actually show the gameplay now.
-function showGameplay(id) {
+// Load the cutscene screen for the given ID.
+function showCutscene(id) {
   // ID needs to be a number in the range of the progression array
   if (id < 0 || id >= progression.length) {
     console.error("Invalid level ID.");
@@ -60,7 +96,20 @@ function showGameplay(id) {
   // Get the level object
   const level = progression[id];
 
+  // Change content
+  const content = document.getElementById('content');
+  content.innerHTML = `<div class="textbox">${level.description}</div>`;
+  content.innerHTML += `<button id="continue">CONTINUE</button>`;
+}
 
+// Load the merchant screen for the given ID.
+function showMerchant(id) {
+
+}
+
+// Start the game at level 0.
+function startGame() {
+  showLevel(0);
 }
 
 // GAME STATE consists of an INDEX of the progression array, an INVENTORY of items, and an amount of MONEY.
@@ -78,6 +127,7 @@ const progression = [
     "type": "cutscene",
     "name": "Welcome!",
     "description": "You are a Crystal Collector. You have been hired to explore the depths of the caverns and collect as many crystals as you can. Good luck!",
+    "image": "assets/cave.jpg"
   },
   {
     "type": "gameplay",
