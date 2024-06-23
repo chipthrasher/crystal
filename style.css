@@ -148,10 +148,15 @@ body {
     border-radius: 0.5em 0.5em 0 0;
     border-bottom: none;
 
-    display: grid;
-    grid-template-columns: 1fr 1fr;
+    display: flex;
+    justify-content: space-between;
 }
 
-#footer span {
-    text-align: center;
+#footer img {
+    width: 1.5em;
+    cursor: pointer;
+}
+
+#footer img.hidden {
+    display: none;
 }

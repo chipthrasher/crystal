@@ -1,8 +1,67 @@
 // When document ready using vanilla JS, add class "header-main-menu" to #header
-document.addEventListener('DOMContentLoaded', function() {
-//   document.getElementById('header').classList.add('header-main-menu');
-  document.getElementById('header').classList.add('header-ingame');
+document.addEventListener('DOMContentLoaded', function () {
+  // document.getElementById('header').classList.add('header-main-menu');
+  // document.getElementById('header').classList.add('header-ingame');
+  // showMenu();
+  showLevel(0);
 });
+
+function showMenu() {
+  // Change header
+
+  document.getElementById('header').classList.add('header-main-menu');
+  const messages = [
+    "ENTER the DEPTHS...",
+    "TRY to get OUT!",
+    "COLLECT them ALL!"
+  ];
+  const message = messages[Math.floor(Math.random() * messages.length)];
+  document.getElementById('header-wrapper').innerHTML = `<div class="title">Crystal Collector 3</div><div class="subtitle">${message}</div>`;
+
+  // Change content
+
+  
+}
+
+function showLevel(id) {
+  // ID needs to be a number in the range of the progression array
+  if (id < 0 || id >= progression.length) {
+    console.error("Invalid level ID.");
+    return;
+  }
+
+  // Get the level object
+  const level = progression[id];
+
+  // Change header
+  document.getElementById('header').classList.add('header-ingame');
+  document.getElementById('header-wrapper').innerHTML = `<div class="title">Crystal Collector 3</div><div class="subtitle">${level.name}</div>`;
+  document.documentElement.style.setProperty('--top-background', `url(${level.image})`);
+
+  // Change content
+  const content = document.getElementById('content');
+  content.innerHTML = '';
+
+  // Add any textbox
+  content.innerHTML += `<div class="textbox">You may take exactly <span id="crystal-count-game">67</span> crystals.<br>Your crystals: <span id="crystal-count-player">0</span></div>`;
+
+  // Add crystals
+  content.innerHTML += `<div class="crystals"><img class="crystal" src="assets/crystal-blue.png" data-color="blue"><img class="crystal" src="assets/crystal-white.png" data-color="white"><img class="crystal" src="assets/crystal-red.png" data-color="red"><img class="crystal" src="assets/crystal-green.png" data-color="green"></div>`;
+}
+
+// Once the level's loading screen is shown, and the START button is clicked, actually show the gameplay now.
+function showGameplay(id) {
+  // ID needs to be a number in the range of the progression array
+  if (id < 0 || id >= progression.length) {
+    console.error("Invalid level ID.");
+    return;
+  }
+
+  // Get the level object
+  const level = progression[id];
+
+
+}
 
 // GAME STATE consists of an INDEX of the progression array, an INVENTORY of items, and an amount of MONEY.
 
@@ -16,10 +75,15 @@ const items = {
 // Array of progression in game;
 const progression = [
   {
+    "type": "cutscene",
+    "name": "Welcome!",
+    "description": "You are a Crystal Collector. You have been hired to explore the depths of the caverns and collect as many crystals as you can. Good luck!",
+  },
+  {
     "type": "gameplay",
     "name": "Green Grotto",
     "description": "You find yourself in the Green Grotto, a lush and verdant cavern. The air is thick with the scent of moss and damp earth. The sound of water dripping echoes through the chamber.",
-    "image": "assets/green-grotto.jpg",
+    "image": "assets/cave.jpg",
     "difficulty": 0
   },
   {
@@ -44,7 +108,7 @@ const progression = [
     "type": "merchant",
     "name": "Ratfolk Merchant",
     "description": "Hello, young collector! I am the Ratfolk Merchant. Surely you are interested in my wares?",
-    "items": [ items.flashlight ]
+    "items": [items.flashlight]
   },
   {
     "type": "gameplay",
