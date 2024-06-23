@@ -139,6 +139,10 @@ button:hover {
     color: var(--light-red);
 }
 
+.text-purple {
+    color: var(--light-purple);
+}
+
 .crystals {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
