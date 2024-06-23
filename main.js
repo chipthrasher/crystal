@@ -48,6 +48,9 @@ function showLevel(id) {
   // Get the level object
   const level = progression[id];
 
+  console.log("Showing level: " + level.name + " (" + level.type + ")");
+  console.log("Game state: " + JSON.stringify(gameState));
+
   // Change header
   document.getElementById('header').classList.add('header-ingame');
   document.getElementById('header-wrapper').innerHTML = `<div class="title">Crystal Collector 3</div><div class="subtitle">${level.name}</div>`;
@@ -83,11 +86,37 @@ function showGameplay(id) {
   const content = document.getElementById('content');
   content.innerHTML = '';
 
+  const crystalsNeeded = Math.floor(Math.random() * (100-30)) + 30; // 30 to 100
+
   // Add any textbox
-  content.innerHTML += `<div class="textbox">You may take exactly 67 crystals.<br>Your crystals: 0</div>`;
+  content.innerHTML += `<div class="textbox">You may take exactly <span class="text-red" id="crystals-needed">${crystalsNeeded}</span> crystals.<br>Your crystals: <span class="text-red" id="crystals-had">0</span></div>`;
 
   // Add crystals
-  content.innerHTML += `<div class="crystals"><img class="crystal" src="assets/crystal-blue.png" data-color="blue"><img class="crystal" src="assets/crystal-white.png" data-color="white"><img class="crystal" src="assets/crystal-red.png" data-color="red"><img class="crystal" src="assets/crystal-green.png" data-color="green"></div>`;
+  content.innerHTML += `<div class="crystals"><img class="crystal" src="assets/crystal-blue.png" id="crystal-blue"><img class="crystal" src="assets/crystal-white.png" id="crystal-white"><img class="crystal" src="assets/crystal-red.png" id="crystal-red"><img class="crystal" src="assets/crystal-green.png" id="crystal-green"></div>`;
+
+  document.getElementById('crystal-blue').setAttribute('data-number', 1 + Math.floor(Math.random() * (20)));
+  document.getElementById('crystal-white').setAttribute('data-number', 1 + Math.floor(Math.random() * (20)));
+  document.getElementById('crystal-red').setAttribute('data-number', 1 + Math.floor(Math.random() * (20)));
+  document.getElementById('crystal-green').setAttribute('data-number', 1 + Math.floor(Math.random() * (20)));
+
+  document.querySelectorAll('.crystal').forEach(crystal => {
+    crystal.addEventListener('click', function() {
+      const number = parseInt(crystal.getAttribute('data-number'));
+      const crystalsHad = parseInt(document.getElementById('crystals-had').innerText);
+
+      if (crystalsHad + number < crystalsNeeded) {
+        document.getElementById('crystals-had').innerText = crystalsHad + number;
+      } else if (crystalsHad + number === crystalsNeeded) {
+        document.getElementById('crystals-had').innerText = crystalsHad + number;
+        content.innerHTML += `<button id="continue">CONTINUE</button>`;
+        document.getElementById('continue').addEventListener('click', advanceLevel);
+      } else {
+        console.log("You collected too many crystals!");
+        showLevel(gameState.level);
+      }
+    
+    });
+  });
 }
 
 // Load the cutscene screen for the given ID.
